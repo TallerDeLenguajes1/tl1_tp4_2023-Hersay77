@@ -23,7 +23,7 @@ Nodo * BuscarNodo(Nodo ** Start,int ID); //FUNCION BUSCAR TAREA POR ID
 void EliminarNodo(Nodo **Start, int ID); //FUNCION ELIMNAR TAREA POR ID
 void DesvincularNodo(Nodo **Start, int ID);//FUNCION DESVINCULAR NODO DE LISTA
 void mostrarUnNodo(Nodo * nodo);
-Nodo * BuscarNodoPorPalabra(Nodo ** Start, char * palabra); //FUNCION BUSCAR NODO POR PALABRA CLAVE
+void BuscarNodoPorPalabra(Nodo ** Start, char * palabra); //FUNCION BUSCAR NODO POR PALABRA CLAVE
 
 int main(){
     int opcion, continuar, id=1000, idAux;
@@ -256,25 +256,10 @@ int main(){
                         fflush(stdin);
                         gets(buff);
                         fflush(stdin);
-                        NodoAux = BuscarNodoPorPalabra(&TareasPendientes, buff);
-                        if (NodoAux)
-                        {
-                            printf("\nTarea encontrada en Tareas Pendientes: ");
-                            mostrarUnNodo(NodoAux);
-                        }
-                        else
-                        {
-                            NodoAux = BuscarNodoPorPalabra(&TareasRealizadas, buff);
-                            if (NodoAux)
-                            {
-                                printf("\nTarea encontrada en Tareas Realizadas: ");
-                                mostrarUnNodo(NodoAux);
-                            }
-                            else
-                            {
-                                printf("\nTarea no encontrada");
-                            }
-                        }
+                        printf("\nTarea encontrada en Tareas Pendientes: ");
+                        BuscarNodoPorPalabra(&TareasPendientes, buff);
+                        printf("\nTarea encontrada en Tareas Realizadas: ");
+                        BuscarNodoPorPalabra(&TareasRealizadas, buff);
                         break;
                     default:
                         printf("\nOpcion ingresada incorrecta");
@@ -396,11 +381,22 @@ void mostrarUnNodo(Nodo * nodo){
     printf("\nDuracion: %d\n", nodo->T.Duracion);
 }
 
-Nodo * BuscarNodoPorPalabra(Nodo ** Start, char * palabra){
+void BuscarNodoPorPalabra(Nodo ** Start, char * palabra){
     Nodo * Aux = *Start;
-    while (Aux && strcmp(Aux->T.Descripcion, palabra) != 0)
+    int contador = 0;
+    while (Aux )
     {
+        if (strstr(Aux->T.Descripcion, palabra) != NULL)
+        {
+            printf("\nCoincidencia con tarea: ");
+            mostrarUnNodo(Aux);
+            contador++;
+        }
+        
         Aux = Aux->Siguiente;
     }
-    return Aux;
+    if (contador == 0)
+    {
+        printf("\nNo se ecnontraron coincidencias");
+    }
 }
